@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import "./Tickets.css"
 
 export const TicketList = () => {
     const [tickets, setTickets] = useState([])
@@ -9,7 +10,7 @@ const setTickets = variableAndSetter[1]...these 3 lines are condensed to one lin
 */
 
 /*
-useEffect() is a function that takes in 2 parameters. The first is a function and the second is an array called the dependency array .If the array is left empty, the function (the first parameter) will be run only when the component loads. If any state variables are put inside the array(like tickes above), then the component will be re-rendered whenever any of these variables change. 
+useEffect() is a function that allows you to observe state and run some instructions shen state changes. It takes in 2 parameters. The first is a function and the second is an array called the dependency array. If the array is left empty, the function (the first parameter) will be run only when the component loads. If any state variables are put inside the array(like tickes above), then the component will be re-rendered whenever any of these variables change. 
 
 useEffect()can be used to do jobs that are not related to rendering stuff on the DOM/screen. React calls these jobs side effects. Example, fetching data, console.logs, authenticating users, etc. useEffect can also force a re-render of the screen when a certain variable changes...
 */
@@ -25,6 +26,19 @@ useEffect()can be used to do jobs that are not related to rendering stuff on the
         },
         [] // When this array is empty, you are observing initial component state
     )
-    return <h2>List of Tickets</h2>
+    return <>
+        <h2>List of Tickets</h2>
+        <article className="tickets">
+            {
+                tickets.map((ticket) => {
+                    return <section className="ticket">
+                        <header>{ticket.description}</header>
+                        <footer>Emergency: {ticket.emergency ? "🧨" : "No"}</footer>
+                    </section>
+                })
+
+            }
+        </article>
+    </>
 }
 

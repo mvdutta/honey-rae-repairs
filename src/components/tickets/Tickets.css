@@ -1,0 +1,12 @@
+.tickets {
+    display: flex;
+    flex-direction: column;
+}
+
+.ticket {
+    background-color: rgb(225, 248, 248);
+    padding: 0.7rem;
+    border: 1px solid darkslateblue;
+    margin: 0.5rem 0;
+    box-shadow: 1px 2px 3px gray;
+}

@@ -4,7 +4,7 @@ import { TicketList } from "../tickets/TicketList"
 export const ApplicationViews = () => {
 	return (
         <Routes>
-            <Route path="/" element={
+            <Route path="/" element={//default on home page
                 <>
                     <h1>Honey Rae Repair Shop</h1>
                     <div>Your one-stop-shop to get all your electronics fixed</div>
@@ -13,7 +13,7 @@ export const ApplicationViews = () => {
                 </>
             }>
 
-                <Route path="tickets" element={ <TicketList /> } />
+                <Route path="tickets" element={ <TicketList /> } />//from home page, if /tickets typed in, TicketList component will be displayed on screen
             </Route>
         </Routes>
     )
