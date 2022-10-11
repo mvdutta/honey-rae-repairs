@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react"
 import "./Tickets.css"
-
-export const TicketList = () => {
-    const [tickets, setTickets] = useState([])
 /*useState is used to register a certain variable with React so it keep track of it and change the DOM when changes are made to the variable via the setter function. To register the variable tickets, with an initial value of [], we do the following: call useState with the initial value (the empty array). Then useState will give us an array with 2 things in it: the first is our variable tickets, and the second is a setter function for our variable which allows us to make any changes to the variable. Both of these are obtained by using array destructuring. The above code is equivalent to the following: 
 const variableAndSetter = useState([])
 const tickets = variableAndSetter[0]
@@ -14,6 +11,15 @@ useEffect() is a function that allows you to observe state and run some instruct
 
 useEffect()can be used to do jobs that are not related to rendering stuff on the DOM/screen. React calls these jobs side effects. Example, fetching data, console.logs, authenticating users, etc. useEffect can also force a re-render of the screen when a certain variable changes...
 */
+export const TicketList = () => {
+    const [tickets, setTickets] = useState([])
+//     //we don't want to modify the array of tickets we got from the API, but still need to display a list of tickets...so need to create another state variable called filteredTickets
+    const [filteredTickets, setFiltered] = useState([])
+
+// //to display only the tickets that customers made and all tickets for employees, need to get honey_user out of local storage(it was put there in NavBar.js)
+const localHoneyUser = localStorage.getItem("honey_user")
+// //this is a string, so needs to be converted to an object using JSON.parse:
+const honeyUserObject = JSON.parse(localHoneyUser)//this will now be an object with two keys on it: id and staff
     useEffect(
         () => {
             console.log("tickets", tickets) // View the initial state of tickets
@@ -26,17 +32,30 @@ useEffect()can be used to do jobs that are not related to rendering stuff on the
         },
         [] // When this array is empty, you are observing initial component state
     )
+//here we can check if the current user is an employee or a customer and modify what goes inside the state variable filteredTickets depending on whether user is customer or employee
+useEffect( () => {
+    if (honeyUserObject.staff) {
+        //if user is staff, need to see all tickets
+        setFiltered(tickets)
+    } else {
+        //for customers, don't want to show all tickets, only the ones they made...can do this by comparing the userId in serviceTickets(i.e tickets) to the unique identifier of the logged in person in honey_user(which can be obtained from honeyUserOject above.)
+        const myTickets = tickets.filter(ticket => ticket.userId === honeyUserObject.id)
+        setFiltered(myTickets)
+    }
+},
+    [tickets]//this function is only run when the tickets state is changed
+
+)
     return <>
         <h2>List of Tickets</h2>
         <article className="tickets">
             {
-                tickets.map((ticket) => {
-                    return <section className="ticket">
+                filteredTickets.map((ticket) => {
+                    return <section className="ticket" key={ticket.id}> {/*key prop is needed whenever .map() or .filter() is used to create multiple JSX elements b/c they all ned their own unique identifier*/}
                         <header>{ticket.description}</header>
                         <footer>Emergency: {ticket.emergency ? "🧨" : "No"}</footer>
                     </section>
                 })
-
             }
         </article>
     </>
