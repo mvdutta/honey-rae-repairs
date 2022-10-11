@@ -1,4 +1,6 @@
+import { toContainElement } from "@testing-library/jest-dom/dist/matchers";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Tickets.css";
 /*useState is used to register a certain variable with React so it keep track of it and change the DOM when changes are made to the variable via the setter function. To register the variable tickets, with an initial value of [], we do the following: call useState with the initial value (the empty array). Then useState will give us an array with 2 things in it: the first is our variable tickets, and the second is a setter function for our variable which allows us to make any changes to the variable. Both of these are obtained by using array destructuring. The above code is equivalent to the following: 
 const variableAndSetter = useState([])
@@ -16,6 +18,9 @@ export const TicketList = () => {
   //     //we don't want to modify the array of tickets we got from the API, but still need to display a list of tickets...so need to create another state variable called filteredTickets
   const [filteredTickets, setFiltered] = useState([]);
   const [showEmergencyTickets, setShowEmergencyTickets] = useState(false);
+  const [openOnly, setOpenOnly] = useState(false);
+  const navigate = useNavigate()
+
 
   // //to display only the tickets that customers made and all tickets for employees, need to get honey_user out of local storage(it was put there in NavBar.js)
   const localHoneyUser = localStorage.getItem("honey_user");
@@ -58,13 +63,46 @@ export const TicketList = () => {
         setFiltered(tickets)
     }
   }, [showEmergencyTickets]);
+
+//   useEffect (
+//     () => {
+//         const openTicketArray = tickets.filter((ticket) => {
+//             return ticket.userId === honeyUserObject.id && ticket.dateCompleted === ""
+//         } );
+//         setFiltered(openTicketArray)
+     
+//     }, [openOnly]
+//   )
+
+  useEffect (
+    () => {
+        if (openOnly) {
+        const openTicketArray = tickets.filter((ticket) => {
+            return ticket.userId === honeyUserObject.id && ticket.dateCompleted === ""
+        } );
+        setFiltered(openTicketArray)
+        } else {
+            const myTickets = tickets.filter(
+                (ticket) => ticket.userId === honeyUserObject.id
+              );
+              setFiltered(myTickets)
+        }
+    }, [openOnly]
+  )
   return (
     <>
       {honeyUserObject.staff 
       ?<>
       <button onClick={() => {setShowEmergencyTickets(true); }}>Emergency Only</button> 
       <button onClick={() => {setShowEmergencyTickets(false); }}>Show All</button> 
-      </>: ""}
+      </>: 
+      <>
+      <button onClick={() => navigate("/ticket/create")}>Create Ticket</button>
+      <button onClick={() => setOpenOnly(true)}>Open Tickets</button>
+      <button onClick={() => setOpenOnly(false)}>All My Tickets</button>
+      </>
+    }   
+
 
       <h2>List of Tickets</h2>
       <article className="tickets">
