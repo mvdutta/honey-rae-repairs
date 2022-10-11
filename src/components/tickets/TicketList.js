@@ -52,21 +52,20 @@ export const TicketList = () => {
 
   useEffect(() => {
     if (showEmergencyTickets) {
-      const emergencyTickets = tickets.filter(
-        (ticket) => ticket.emergency === true
-      );
+      const emergencyTickets = tickets.filter((ticket) => ticket.emergency === true);
       setFiltered(emergencyTickets);
+    } else {
+        setFiltered(tickets)
     }
   }, [showEmergencyTickets]);
   return (
     <>
-      {honeyUserObject.staff ? (
-        <button
-          onClick={() => {
-            setShowEmergencyTickets(true);
-          }}
-        >Emergency Only</button>) : ""
-      }
+      {honeyUserObject.staff 
+      ?<>
+      <button onClick={() => {setShowEmergencyTickets(true); }}>Emergency Only</button> 
+      <button onClick={() => {setShowEmergencyTickets(false); }}>Show All</button> 
+      </>: ""}
+
       <h2>List of Tickets</h2>
       <article className="tickets">
         {filteredTickets.map((ticket) => {
