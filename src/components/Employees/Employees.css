@@ -1,0 +1,20 @@
+.employees {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 2rem;
+}
+
+.employee {
+   background-color: rgb(241, 207, 235); 
+   border: 1px solid black;
+   padding: 0.9rem;
+   color: rgb(24, 21, 21);
+   border-radius: 6px;
+   font-size: 16px;
+}
+.employeeHeader {
+    text-align: center;
+    font-size: 25px;
+}

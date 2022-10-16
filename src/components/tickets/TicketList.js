@@ -13,7 +13,7 @@ useEffect() is a function that allows you to observe state and run some instruct
 
 useEffect()can be used to do jobs that are not related to rendering stuff on the DOM/screen. React calls these jobs side effects. Example, fetching data, console.logs, authenticating users, etc. useEffect can also force a re-render of the screen when a certain variable changes...
 */
-export const TicketList = () => {
+export const TicketList = ({searchTermState}) => {
   const [tickets, setTickets] = useState([]);
   //     //we don't want to modify the array of tickets we got from the API, but still need to display a list of tickets...so need to create another state variable called filteredTickets
   const [filteredTickets, setFiltered] = useState([]);
@@ -88,6 +88,16 @@ export const TicketList = () => {
               setFiltered(myTickets)
         }
     }, [openOnly]
+  )
+
+  //to observe searchTermState from TicketContainer:
+  useEffect(
+    () => {
+        const searchedTickets = tickets.filter(ticket => {
+          return ticket.description.toLowerCase().startsWith(searchTermState.toLowerCase())
+        })//produces an array of tickets whose description matches what is typed into the input field
+        setFiltered(searchedTickets)//filteredTickets is the state we are actually displaying, so it is the one we need to update with the new array searchedTickets
+    }, [searchTermState]
   )
   return (
     <>
