@@ -17,6 +17,8 @@
 .employeeHeader {
     text-align: center;
     font-size: 25px;
+    margin-top: 30px;
+    margin-bottom: 40px;
 }
 
 .employee__header {

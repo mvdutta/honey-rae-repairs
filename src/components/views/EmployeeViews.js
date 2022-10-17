@@ -11,7 +11,7 @@ export const EmployeeViews = () => {
             <Route path="/" element={//default on home page
                 <>
                     <h1>Honey Rae Repair Shop</h1>
-                    <div>Your one-stop-shop to get all your electronics fixed</div>
+                    <div className="view-subheader">Your one-stop-shop to get all your electronics fixed</div>
 
                     <Outlet />
                 </>

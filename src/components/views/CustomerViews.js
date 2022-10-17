@@ -1,14 +1,14 @@
 import { Outlet, Route, Routes } from "react-router-dom"
 import { TicketForm } from "../tickets/TicketForm"
 import { TicketList } from "../tickets/TicketList"
-
+import "../nav/NavBar.css"
 export const CustomerViews = () => {
 	return (
         <Routes>
             <Route path="/" element={//default on home page
                 <>
                     <h1>Honey Rae Repair Shop</h1>
-                    <div>Your one-stop-shop to get all your electronics fixed</div>
+                    <div className="view-subheader">Your one-stop-shop to get all your electronics fixed</div>
 
                     <Outlet />
                 </>
