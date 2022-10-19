@@ -7,6 +7,14 @@ export const EmployeeForm = () => {
         rate: 0,
         userId: 0
     })
+    const [feedback, setFeedback] = useState("")
+
+    useEffect(() => {
+    if (feedback !== "") {
+        // Clear feedback to make entire element disappear after 3 seconds
+        setTimeout(() => setFeedback(""), 3000);
+    }
+}, [feedback])
 
     const localHoneyUser = localStorage.getItem("honey_user");
     // //this is a string, so needs to be converted to an object using JSON.parse:
@@ -41,11 +49,14 @@ export const EmployeeForm = () => {
             })
             .then(res => res.json()) 
             .then(() => {
-
+                setFeedback("Employee profile successfully saved")
             })
             }
 
-    return (
+    return (<>
+        <div className={`${feedback.includes("Error") ? "error" : "feedback"} ${feedback === "" ? "invisible" : "visible"}`}>
+        {feedback}
+        </div>
         <form className="profile">
             <h2 className="profile__title">New Service Ticket</h2>
             <fieldset>
@@ -91,5 +102,6 @@ export const EmployeeForm = () => {
                 Save Profile
             </button>
         </form>
+        </>
     )
 }
