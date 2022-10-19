@@ -1,6 +1,7 @@
 import { toContainElement } from "@testing-library/jest-dom/dist/matchers";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Ticket } from "./ticket";
 import "./Tickets.css";
 /*useState is used to register a certain variable with React so it keep track of it and change the DOM when changes are made to the variable via the setter function. To register the variable tickets, with an initial value of [], we do the following: call useState with the initial value (the empty array). Then useState will give us an array with 2 things in it: the first is our variable tickets, and the second is a setter function for our variable which allows us to make any changes to the variable. Both of these are obtained by using array destructuring. The above code is equivalent to the following: 
 const variableAndSetter = useState([])
@@ -116,17 +117,12 @@ export const TicketList = ({searchTermState}) => {
 
       <h2>List of Tickets</h2>
       <article className="tickets">
-        {filteredTickets.map((ticket) => {
-          return (
-            <section className="ticket" key={ticket.id}>
-              {" "}
-              {/*key prop is needed whenever .map() or .filter() is used to create multiple JSX elements b/c they all ned their own unique identifier*/}
-              <header>{ticket.description}</header>
-              <footer>Emergency: {ticket.emergency ? "🧨" : "No"}</footer>
-            </section>
-          );
-        })}
+        {filteredTickets.map(
+          (ticket) => <Ticket isStaff={honeyUserObject.staff} ticketObject={ticket}/>//as this iterates, it is going to create a brand new ticket component and the prop is going to be ticketObject for each one, which will be passed into Ticket
+          
+          )
+        }
       </article>
     </>
-  );
+  )
 };
