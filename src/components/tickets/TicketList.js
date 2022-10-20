@@ -1,7 +1,7 @@
 import { toContainElement } from "@testing-library/jest-dom/dist/matchers";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Ticket } from "./ticket";
+import { Ticket } from "./Ticket";
 import "./Tickets.css";
 /*useState is used to register a certain variable with React so it keep track of it and change the DOM when changes are made to the variable via the setter function. To register the variable tickets, with an initial value of [], we do the following: call useState with the initial value (the empty array). Then useState will give us an array with 2 things in it: the first is our variable tickets, and the second is a setter function for our variable which allows us to make any changes to the variable. Both of these are obtained by using array destructuring. The above code is equivalent to the following: 
 const variableAndSetter = useState([])
@@ -17,6 +17,7 @@ useEffect()can be used to do jobs that are not related to rendering stuff on the
 export const TicketList = ({searchTermState}) => {
   const [tickets, setTickets] = useState([]);
   //     //we don't want to modify the array of tickets we got from the API, but still need to display a list of tickets...so need to create another state variable called filteredTickets
+  const [employees, setEmployees] = useState([]);
   const [filteredTickets, setFiltered] = useState([]);
   const [showEmergencyTickets, setShowEmergencyTickets] = useState(false);
   const [openOnly, setOpenOnly] = useState(false);
@@ -27,14 +28,23 @@ export const TicketList = ({searchTermState}) => {
   const localHoneyUser = localStorage.getItem("honey_user");
   // //this is a string, so needs to be converted to an object using JSON.parse:
   const honeyUserObject = JSON.parse(localHoneyUser); //this will now be an object with two keys on it: id and staff
-  useEffect(
-    () => {
-      console.log("tickets", tickets); // View the initial state of tickets
-      fetch(`http://localhost:8088/serviceTickets`)
+const getAllTickets = () => {
+        fetch(`http://localhost:8088/serviceTickets?_embed=employeeTickets`)
         .then((res) => res.json())
         .then((ticketsFetched) => {
-          //once tickets have been fetched and converted from json to a JS array of objects, we will use this as a parameter in setTickets() to update the value of tickets
-          setTickets(ticketsFetched);
+         //once tickets have been fetched and converted from json to a JS array of objects, we will use this as a parameter in setTickets() to update the value of tickets
+        setTickets(ticketsFetched);
+        });
+      }
+
+  useEffect(
+    () => {
+      getAllTickets()  
+
+        fetch(`http://localhost:8088/employees?_expand=user`)
+        .then((res) => res.json())
+        .then((employeeArray) => {
+          setEmployees(employeeArray);
         });
     },
     [] // When this array is empty, you are observing initial component state
@@ -118,7 +128,11 @@ export const TicketList = ({searchTermState}) => {
       <h2>List of Tickets</h2>
       <article className="tickets">
         {filteredTickets.map(
-          (ticket) => <Ticket isStaff={honeyUserObject.staff} ticketObject={ticket}/>//as this iterates, it is going to create a brand new ticket component and the prop is going to be ticketObject for each one, which will be passed into Ticket
+          (ticket) => <Ticket 
+          getAllTickets={getAllTickets}
+          employees={employees} 
+          currentUser={honeyUserObject} 
+          ticketObject={ticket}/>//as this iterates, it is going to create a brand new ticket component and the prop is going to be ticketObject for each one, which will be passed into Ticket
           
           )
         }
