@@ -19,7 +19,22 @@ const userEmployee = employees.find(employee => employee.userId === currentUser.
 //function that determines if the current user can close the ticket
 const canClose = () => {
     if (userEmployee?.id === assignedEmployee?.id && ticketObject.dateCompleted === "") {
-        return <button onClick={closeTicket} classname="ticket__finish">Finish</button>
+        return <div className="finishbuttonholder"><button onClick={closeTicket} className="ticket__finish">Finish</button></div>
+    } else {
+        return ""
+    }
+
+}
+const deleteButton = () => {
+    if (!currentUser.staff) {
+        return <div className="finishbuttonholder"><button onClick={()=> {
+            fetch(`http://localhost:8088/serviceTickets/${ticketObject.id}`, {
+                method: "DELETE"
+            })
+            .then(() => {
+                getAllTickets()
+            })
+        }} className="ticket__delete">Delete</button></div>
     } else {
         return ""
     }
@@ -87,7 +102,8 @@ const buttonOrNoButton = () => {
                     : buttonOrNoButton()
                 }
                 {
-                    canClose()
+                    currentUser.staff
+                    ?canClose():deleteButton()
                 }
               </footer>
             </section>

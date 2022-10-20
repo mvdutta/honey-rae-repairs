@@ -19,3 +19,11 @@ button {
     margin-top: 20px;
     margin-right: 20px;
 }
+
+.ticket__finish {
+  background-color: aquamarine;
+}
+.ticket__delete {
+    background-color: rgb(230, 154, 169);
+    color: black;
+}
